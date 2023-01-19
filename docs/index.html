@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hash Cracker</title>
+        <script src="ydf/inference.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js"></script>
+        <script>
+            let ydf = null;
+            let model = null;
+
+            // Update from time to time when building the model.
+            const classes = ["SHA512", "SHA384", "SHA3-512", "SHA3-384", "SHA3-256", "SHA3-224", "SHA256", "SHA224", "SHA1", "PBKDF2-HMAC-SHA256", "NTLM", "MD5", "MD4", "Hex", "Decimal", "Caesar", "Binary", "Base64", "Base32", "Atbash", "Vigenere"];
+            
+            YggdrasilDecisionForests().then(function (m) {
+                ydf = m;
+
+                console.log("The library is loaded.");
+
+                ydf.loadModelFromUrl("model.zip").then((loadedModel) => {
+                    model = loadedModel;
+
+                    console.log("Model loaded.");
+                    // console.log("Input features:");
+                    // console.log(model.getInputFeatures());
+                });
+            });
+
+            document.addEventListener('DOMContentLoaded', () => {
+                let elemResults = document.getElementById('results');
+
+                const elemInput = document.getElementById('hash');
+                const elemBtn = document.getElementById('identify');
+                
+                // Infer using the model
+                elemBtn.addEventListener('click', () => {
+                    // Initialize the results
+                    elemResults.innerHTML = '';
+
+                    if (model == null) {
+                        console.log("Model is not loaded.");
+                        return;
+                    }
+
+                    let hash = elemInput.value;
+                    if (hash == "") {
+                        console.log("Hash not given.");
+                        return;
+                    }
+
+                    // Create feature values
+                    let features = createFeatures(hash);
+                    console.log("Features:");
+                    console.log(features);
+
+                    // Prediction
+                    let predictions = model.predict(features);
+
+                    let obj = {};
+                    predictions.forEach((pred, idx) => {
+                        obj[classes[idx]] = pred;
+                    });
+
+                    // Sort
+                    const arr = [];
+                    const keys = Object.keys(obj);
+                    const values = Object.values(obj);
+                    values.forEach((val, idx) => {
+                        const key = keys[idx];
+                        const o = {
+                            key,
+                            val
+                        };
+                        arr.push(o);
+                    });
+                    arr.sort((a, b) => {
+                        return b.val - a.val;
+                    });
+
+                    // Display the result
+                    arr.forEach((o, i) => {
+                        if (i >= 5 || o.val <= 0.0001) { return; }
+                        let elemResult = document.createElement("div");
+                        elemResult.classList.add("result");
+                        let elemSpanKey = document.createElement("span");
+                        elemSpanKey.classList.add("hash-type");
+                        elemSpanKey.innerText = o.key;
+                        let elemSpanVal = document.createElement("span");
+                        elemSpanVal.classList.add("probability");
+                        elemSpanVal.innerText = new Intl.NumberFormat('en-US', { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(o.val);
+                        elemResult.appendChild(elemSpanKey);
+                        elemResult.appendChild(elemSpanVal);
+                        elemResults.appendChild(elemResult);
+
+                        // Adjustment styles
+                        let fontSize = "2.4em";
+                        let opacity = "1";
+                        switch (i) {
+                            case 0:
+                                fontSize = "2.4em";
+                                break;
+                            case 1:
+                                fontSize = "2.0em";
+                                opacity = "0.8";
+                                break;
+                            case 2:
+                                fontSize = "1.6em";
+                                opacity = "0.6";
+                                break;
+                            default:
+                                opacity = "0.4";
+                                fontSize = "1.4em"
+                        }
+
+                        elemSpanKey.style.fontSize = fontSize;
+                        elemSpanKey.style.opacity = opacity;
+                    });
+                })
+            });
+
+            function createFeatures(hash) {
+                // contains_bit_only
+                let contains_bit_only = Number(!/[^01]/.test(hash));
+                // contains_decimal_only
+                let contains_decimal_only = Number(!/[^0-9]/.test(hash));
+                // contains_hex_only
+                let reHex = new RegExp(`[0-9a-fA-F]{${hash.length}}`, 'g');
+                // let contains_hex_only =  Number(reHex.test(hash));
+                let contains_hex_only = Number(/^[0-9a-fA-F]*$/.test(hash));
+                // contains_alpha_only
+                let contains_alpha_only = Number(/^[a-zA-Z]*$/.test(hash));
+                // contains_upper_case_only
+                let contains_upper_case_only = Number(hash == hash.toUpperCase());
+                // contains_lower_case_only
+                let contains_lower_case_only = Number(hash == hash.toLowerCase());
+                // contains_mixed_upper_lower_case
+                let reUpper = new RegExp("[A-Z]");
+                let reLower = new RegExp("[a-z]");
+                let contains_mixed_upper_lower_case = Number(reUpper.test(hash) & reLower.test(hash));
+                // contains_equal
+                let contains_equal = Number(/\=/.test(hash));
+                // contains_special_chars
+                let contains_special_chars = Number(/\W/.test(hash));
+
+                let features = {
+                    num_of_chars: [hash.length],
+                    contains_bit_only: [contains_bit_only],
+                    contains_decimal_only: [contains_decimal_only],
+                    contains_hex_only: [contains_hex_only],
+                    contains_alpha_only: [contains_alpha_only],
+                    contains_upper_case_only: [contains_upper_case_only],
+                    contains_lower_case_only: [contains_lower_case_only],
+                    contains_mixed_upper_lower_case: [contains_mixed_upper_lower_case],
+                    contains_equal: [contains_equal],
+                    contains_special_chars: [contains_special_chars],
+                };
+                return features;
+            }
+        </script>
+        <style>
+            :root {
+                --color-black: #000000;
+                --color-gray-dark: #828a89;
+                --color-gray: #a2aaa9;
+                --color-gray-light: #e2eae9;
+                --color-blue: #1060ba;
+                --color-white: #ffffff;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            html,body {
+                width: 100vw;
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                background-color: var(--color-white);
+                font-size: 16px;
+                font-family:cursive;
+            }
+
+            a {
+                color: var(--color-blue);
+                font-weight: bold;
+            }
+
+            main {
+                margin: 72px auto;
+                width: 50%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            header {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+            header #title {
+                margin: 12px 0;
+                font-size: 2.4em;
+            }
+            header #links {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+            }
+            header #links a {
+                margin: 0 6px;
+                font-size: 1.1em;
+                color: var(--color-black);
+                text-decoration: none;
+            }
+            header #links a:hover {
+                text-decoration: underline;
+            }
+
+            #desc {
+                margin: 8px 0;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+            #desc span {
+                font-size: 1.1em;
+                line-height: 1.6em;
+            }
+
+            #wrapper {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+            }
+
+            #wrapper textarea {
+                resize: none;
+                width: 100%;
+                height: 180px;
+                padding: 24px;
+                border: 3px solid var(--color-black);
+                border-radius: 0 24px 0 0;
+                outline: none;
+                font-size: 1.2em;
+                font-weight: bold;
+                transition: 0.1s;
+            }
+            #wrapper button {
+                margin-top: 12px;
+                background-color: var(--color-black);
+                border: 3px solid var(--color-black);
+                border-radius: 0 0 0 24px;
+                outline: none;
+                padding: 12px 24px;
+                font-size: 1.3em;
+                font-weight: bold;
+                color: var(--color-white);
+                cursor: pointer;
+                transition: 0.1s;
+            }
+            #wrapper button:hover {
+                background-color: var(--color-white);
+                color: var(--color-black);
+            }
+
+            #results {
+                margin-top: 32px;
+                width: 100%;
+            }
+            #results .result {
+                margin: 24px 0;
+                width: 100%;
+                background-color: var(--color-white);
+                border-bottom: 2px solid var(--color-black);
+                border-radius: 12px 12px 0 0;
+                padding: 8px;
+                display: flex;
+                flex-direction: row;
+                align-items: baseline;
+                justify-content: space-between;
+                cursor: pointer;
+                transition: 0.1s;
+            }
+            #results .result:hover {
+                background-color: var(--color-gray-light);
+            }
+            #results .result span {
+                margin: 0 8px;
+                font-weight: bold;
+            }
+            #results .result .hash-type {
+                font-size: 1.8em;
+            }
+            #results .result .probability {
+                font-size: 1.2em;
+                color: var(--color-gray-dark);
+            }
+
+            @media screen and (max-width: 720px) {
+                main {
+                    width: 70%;
+                }
+
+                header {
+                    flex-direction: column;
+                    justify-content: initial;
+                }
+            }
+
+            @media screen and (max-width: 480px) {
+                main {
+                    margin: 28px auto;
+                    width: 90%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <header>
+                <h1 id="title">Hash Cracker</h1>
+                <div id="links">
+                    <a href="https://exploit-notes.hdks.org/">
+                        Exploit Notes
+                    </a>
+                    <a href="https://github.com/hideckies/hash-cracker">
+                        Source
+                    </a>
+                </div>
+            </header>
+            <p id="desc">
+                <span>
+                    AI-powered Hash Identifier & Cracker online. Currently Hash Identifier is only available, Cracker is not yet. So I give some useful commands we can crack right away. 
+                </span>
+                <span>
+                    Hash Identifier uses Decision Forests model trained with <a href="https://github.com/google/yggdrasil-decision-forests">Yggdrasil</a>.
+                </span>
+            </p>
+            <div id="wrapper">
+                <textarea type="text" placeholder="Enter MD5, SHA256, Base64, etc." id="hash"></textarea>
+                <button type="button" id="identify">Identify</button>
+            </div>
+            <div id="results">
+            </div>
+        </main>
+    </body>
+</html>
