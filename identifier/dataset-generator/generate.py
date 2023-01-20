@@ -1,9 +1,15 @@
 import base64
+import bcrypt
 import codecs
+import concurrent.futures
 import csv
 import hashlib
 import os
+from passlib.hash import (
+    apr_md5_crypt, bcrypt, des_crypt, lmhash,
+    md5_crypt, phpass, sha1_crypt, sha256_crypt, sha512_crypt)
 import re
+import time
 
 
 script_path = os.path.dirname(__file__)
@@ -12,6 +18,7 @@ dataset_path = script_path + "/../dataset/"
 header = [
     'type',
     'encoded_text',
+    'scheme',
     'num_of_chars',
     'contains_bit_only',
     'contains_decimal_only',
@@ -21,11 +28,12 @@ header = [
     'contains_lower_case_only',
     'contains_mixed_upper_lower_case',
     'contains_equal',
+    'contains_slash',
+    'contains_dot',
+    'contains_colon',
     'contains_special_chars'
 ]
-num_per_hash_for_train = 400
-num_per_hash_for_test = 100
-
+num_per_hash = 500
 
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 letter_to_index = dict(zip(alphabet, range(len(alphabet))))
@@ -35,6 +43,7 @@ def create_row(hash, hash_type):
     return [
         hash_type,
         hash,
+        get_scheme(hash),
         len(hash),
         contains_bit_only(hash),
         contains_decimal_only(hash),
@@ -44,8 +53,22 @@ def create_row(hash, hash_type):
         contains_lower_case_only(hash),
         contains_mixed_upper_lower_case(hash),
         contains_equal(hash),
+        contains_slash(hash),
+        contains_dot(hash),
+        contains_colon(hash),
         contains_special_chars(hash)
     ]
+
+
+def get_scheme(chars):
+    if chars[0] != "$":
+        return "None"
+    
+    scheme = re.search("^\$[0-9a-zA-Z]+\$", chars)
+    if scheme is None:
+        return "None"
+    else:
+        return scheme.group(0)
 
 
 def contains_bit_only(chars):
@@ -85,18 +108,30 @@ def contains_equal(chars):
     return int(len(re.findall("\=", chars)) > 0)
 
 
+def contains_slash(chars):
+    return int(len(re.findall("\/", chars)) > 0)
+
+
+def contains_dot(chars):
+    return int(len(re.findall("\.", chars)) > 0)
+
+
+def contains_colon(chars):
+    return int(len(re.findall("\:", chars)) > 0)
+
+
 def contains_special_chars(chars):
     return int(len(re.findall("\W", chars)) > 0)
+
+
+def data_apr_md5_crypt(w):
+    hash = apr_md5_crypt.hash(w.encode('utf-8'))
+    return create_row(hash, 'Apache MD5 Crypt')
 
 
 def data_atbash(w):
     hash = ''.join([chr(ord('z') + ord('a') - ord(x)) for x in w])
     return create_row(hash, 'Atbash')
-
-
-def data_binary(w):
-    hash = ''.join(format(ord(x), 'b') for x in w)
-    return create_row(hash, 'Binary')
 
 
 def data_base32(w):
@@ -107,6 +142,28 @@ def data_base32(w):
 def data_base64(w):
     hash = base64.b64encode(w.encode('utf-8')).decode()
     return create_row(hash, 'Base64')
+
+
+def data_bcrypt(w):
+    hash = bcrypt.hash(w.encode('utf-8'))
+    return create_row(hash, 'bcrypt')
+
+
+def data_binary(w):
+    hash = ''.join(format(ord(x), 'b') for x in w)
+    return create_row(hash, 'Binary')
+
+
+def data_blake2b(w):
+    hash = hashlib.blake2b()
+    hash.update(w.encode('utf-8'))
+    return create_row(hash.hexdigest(), 'BLAKE2b')
+
+
+def data_blake2s(w):
+    hash = hashlib.blake2s()
+    hash.update(w.encode('utf-8'))
+    return create_row(hash.hexdigest(), 'BLAKE2s')
 
 
 def data_caesar(w):
@@ -126,9 +183,19 @@ def data_decimal(w):
     return create_row(hash, 'Decimal')
 
 
+def data_descrypt(w):
+    hash = des_crypt.hash(w.encode('utf-8'))
+    return create_row(hash, 'descrypt')
+
+
 def data_hex(w):
     hash = ''.join(format(ord(x), 'x') for x in w)
     return create_row(hash, 'Hex')
+
+
+def data_lm(w):
+    hash = lmhash.hash(w.encode('utf-8'))
+    return create_row(hash, 'LM')
 
 
 def data_md4(w):
@@ -141,6 +208,11 @@ def data_md5(w):
     return create_row(hash, 'MD5')
 
 
+def data_md5_crypt(w):
+    hash = md5_crypt.hash(w.encode('utf-8'))
+    return create_row(hash, 'md5crypt')
+
+
 def data_ntlm(w):
     hash = hashlib.new('md4', w.encode('utf-16le')).hexdigest()
     return create_row(hash, 'NTLM')
@@ -149,6 +221,16 @@ def data_ntlm(w):
 def data_pbkdf2_hmac_sha256(w):
     hash = hashlib.pbkdf2_hmac('SHA256', w.encode('utf-8'), b'salt'*2, 1000).hex()
     return create_row(hash, 'PBKDF2-HMAC-SHA256')
+
+
+def data_pbkdf2_hmac_sha512(w):
+    hash = hashlib.pbkdf2_hmac('SHA512', w.encode('utf-8'), b'salt'*2, 1000).hex()
+    return create_row(hash, 'PBKDF2-HMAC-SHA512')
+
+
+def data_phpass(w):
+    hash = phpass.hash(w.encode('utf-8'))
+    return create_row(hash, 'PHPass')
 
 
 def data_rot13(w):
@@ -173,6 +255,11 @@ def data_sha1(w):
     return create_row(hash, 'SHA1')
 
 
+def data_sha1_crypt(w):
+    hash = sha1_crypt.hash(w.encode('utf-8'))
+    return create_row(hash, 'sha1crypt')
+
+
 def data_sha224(w):
     hash = hashlib.sha224(w.encode('utf-8')).hexdigest()
     return create_row(hash, 'SHA224')
@@ -183,6 +270,11 @@ def data_sha256(w):
     return create_row(hash, 'SHA256')
 
 
+def data_sha256_crypt(w):
+    hash = sha256_crypt.hash(w.encode('utf-8'))
+    return create_row(hash, 'sha256crypt')
+
+
 def data_sha384(w):
     hash = hashlib.sha384(w.encode('utf-8')).hexdigest()
     return create_row(hash, 'SHA384')
@@ -191,6 +283,11 @@ def data_sha384(w):
 def data_sha512(w):
     hash = hashlib.sha512(w.encode('utf-8')).hexdigest()
     return create_row(hash, 'SHA512')
+
+
+def data_sha512_crypt(w):
+    hash = sha512_crypt.hash(w.encode('utf-8'))
+    return create_row(hash, 'sha512crypt')
 
 
 def data_sha3_224(w):
@@ -231,28 +328,41 @@ def data_vigenere(w):
         return create_row(hash, 'Vigenere')
     except:
         print(f"{w}: Cannot generate Vigenere Cipher.")
+        return None
 
 
 def create_datas(w):
     datas = []
+    datas.append(data_apr_md5_crypt(w))
     datas.append(data_atbash(w))
     datas.append(data_base32(w))
     datas.append(data_base64(w))
+    datas.append(data_bcrypt(w))
     datas.append(data_binary(w))
+    datas.append(data_blake2b(w))
+    datas.append(data_blake2s(w))
     datas.append(data_caesar(w))
     datas.append(data_decimal(w))
+    datas.append(data_descrypt(w))
     datas.append(data_hex(w))
+    datas.append(data_lm(w))
     datas.append(data_md4(w))
     datas.append(data_md5(w))
+    datas.append(data_md5_crypt(w))
     datas.append(data_ntlm(w))
     datas.append(data_pbkdf2_hmac_sha256(w))
-    # datas.append(data_rot13(w))
-    # datas.append(data_rot47(w))
+    datas.append(data_pbkdf2_hmac_sha512(w))
+    datas.append(data_phpass(w))
+    datas.append(data_rot13(w))
+    datas.append(data_rot47(w))
     datas.append(data_sha1(w))
+    datas.append(data_sha1_crypt(w))
     datas.append(data_sha224(w))
     datas.append(data_sha256(w))
+    datas.append(data_sha256_crypt(w))
     datas.append(data_sha384(w))
     datas.append(data_sha512(w))
+    datas.append(data_sha512_crypt(w))
     datas.append(data_sha3_224(w))
     datas.append(data_sha3_256(w))
     datas.append(data_sha3_384(w))
@@ -265,6 +375,10 @@ def create_datas(w):
     return datas
 
 
+def proc(word):
+    return create_datas(word)
+
+
 def write_csv(filepath, header, data):
     with open(filepath, 'w', encoding='utf-8') as f:
         writer = csv.writer(f)
@@ -273,16 +387,26 @@ def write_csv(filepath, header, data):
 
 
 def main():
-    datas_train = []
-    datas_test = []
+    start = time.time()
+
+    datas = []
     
     with open(script_path + '/words.txt', 'r', encoding='utf-8') as f:
         words = [w.rstrip() for w in f.readlines()]
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
+        futures = []
         for idx, word in enumerate(words):
-            if 0 <= idx & idx < num_per_hash_for_train:
-                datas_train += create_datas(word)
-            elif num_per_hash_for_train <= idx & idx < num_per_hash_for_train + num_per_hash_for_test:
-                datas_test += create_datas(word)
+            if idx < num_per_hash:
+                futures.append(executor.submit(proc, word))
+        print(f"Excurint total {len(futures)} jobs")
+        for idx, future in enumerate(concurrent.futures.as_completed(futures)):
+            datas += future.result()
+    
+    # Split datas
+    w = int(len(datas) * 2/3)
+    datas_train = datas[0:w]
+    datas_test = datas[w:]
 
     write_csv(dataset_path + 'hashes_train.csv', header, datas_train)
     write_csv(dataset_path + 'hashes_test.csv', header, datas_test)
@@ -291,5 +415,8 @@ def main():
     print(f"Length of datas_test: {len(datas_test)}")
 
     print("Generated the hashes dataset successfully.")
+
+    end = time.time()
+    print("Process time: %.2f seconds" % (end - start))
 
 main()

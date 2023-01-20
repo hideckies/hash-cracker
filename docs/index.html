@@ -4,6 +4,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Hash Cracker</title>
+        <meta name="description" content="AI-powered Hash Identifier & Cracker online. Guessable hases are descrypt,bcrypt,Caesar,Binary,Base64,Base32,BLAKE2s,BLAKE2b,Atbash,Apache MD5 Crypt,sha512crypt,sha256crypt,sha1crypt,md5crypt,SHA512,SHA384,SHA3-512,SHA3-384,SHA3-256,SHA3-224,SHA256,SHA224,SHA1,ROT47,ROT13,PHPass,PBKDF2-HMAC-SHA512,PBKDF2-HMAC-SHA256,NTLM,MD5,MD4,LM,Hex,Vigenere.">
         <script src="ydf/inference.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js"></script>
         <script>
@@ -11,7 +12,7 @@
             let model = null;
 
             // Update from time to time when building the model.
-            const classes = ["SHA512", "SHA384", "SHA3-512", "SHA3-384", "SHA3-256", "SHA3-224", "SHA256", "SHA224", "SHA1", "PBKDF2-HMAC-SHA256", "NTLM", "MD5", "MD4", "Hex", "Decimal", "Caesar", "Binary", "Base64", "Base32", "Atbash", "Vigenere"];
+            const classes = ["descrypt", "bcrypt", "Caesar", "Binary", "Base64", "Base32", "BLAKE2s", "BLAKE2b", "Atbash", "Apache", "MD5", "Crypt", "sha512crypt", "sha256crypt", "sha1crypt", "md5crypt", "SHA512", "SHA384", "SHA3-512", "SHA3-384", "SHA3-256", "SHA3-224", "SHA256", "SHA224", "SHA1", "ROT47", "ROT13", "PHPass", "PBKDF2-HMAC-SHA512", "PBKDF2-HMAC-SHA256", "NTLM", "MD5", "MD4", "LM", "Hex", "Vigenere"];
             
             YggdrasilDecisionForests().then(function (m) {
                 ydf = m;
@@ -92,68 +93,32 @@
                         elemResult.appendChild(elemSpanKey);
                         elemResult.appendChild(elemSpanVal);
                         elemResults.appendChild(elemResult);
-
-                        // Adjustment styles
-                        let fontSize = "2.4em";
-                        let opacity = "1";
-                        switch (i) {
-                            case 0:
-                                fontSize = "2.4em";
-                                break;
-                            case 1:
-                                fontSize = "2.0em";
-                                opacity = "0.8";
-                                break;
-                            case 2:
-                                fontSize = "1.6em";
-                                opacity = "0.6";
-                                break;
-                            default:
-                                opacity = "0.4";
-                                fontSize = "1.4em"
-                        }
-
-                        elemSpanKey.style.fontSize = fontSize;
-                        elemSpanKey.style.opacity = opacity;
                     });
                 })
             });
 
             function createFeatures(hash) {
-                // contains_bit_only
-                let contains_bit_only = Number(!/[^01]/.test(hash));
-                // contains_decimal_only
-                let contains_decimal_only = Number(!/[^0-9]/.test(hash));
-                // contains_hex_only
-                let reHex = new RegExp(`[0-9a-fA-F]{${hash.length}}`, 'g');
-                // let contains_hex_only =  Number(reHex.test(hash));
-                let contains_hex_only = Number(/^[0-9a-fA-F]*$/.test(hash));
-                // contains_alpha_only
-                let contains_alpha_only = Number(/^[a-zA-Z]*$/.test(hash));
-                // contains_upper_case_only
-                let contains_upper_case_only = Number(hash == hash.toUpperCase());
-                // contains_lower_case_only
-                let contains_lower_case_only = Number(hash == hash.toLowerCase());
-                // contains_mixed_upper_lower_case
-                let reUpper = new RegExp("[A-Z]");
-                let reLower = new RegExp("[a-z]");
-                let contains_mixed_upper_lower_case = Number(reUpper.test(hash) & reLower.test(hash));
-                // contains_equal
-                let contains_equal = Number(/\=/.test(hash));
-                // contains_special_chars
-                let contains_special_chars = Number(/\W/.test(hash));
+                let scheme = "None";
+                let schmMatch = hash.match(/^\$[0-9a-zA-Z]+\$/);
+                if (schmMatch) {
+                    scheme = schmMatch[0];
+                }
 
                 let features = {
+                    scheme: [scheme],
                     num_of_chars: [hash.length],
-                    contains_bit_only: [contains_bit_only],
-                    contains_decimal_only: [contains_decimal_only],
-                    contains_hex_only: [contains_hex_only],
-                    contains_alpha_only: [contains_alpha_only],
-                    contains_upper_case_only: [contains_upper_case_only],
-                    contains_lower_case_only: [contains_lower_case_only],
-                    contains_mixed_upper_lower_case: [contains_mixed_upper_lower_case],
-                    contains_equal: [contains_equal],
-                    contains_special_chars: [contains_special_chars],
+                    contains_bit_only: [Number(!/[^01]/.test(hash))],
+                    contains_decimal_only: [Number(!/[^0-9]/.test(hash))],
+                    contains_hex_only: [Number(/^[0-9a-fA-F]*$/.test(hash))],
+                    contains_alpha_only: [Number(/^[a-zA-Z]*$/.test(hash))],
+                    contains_upper_case_only: [Number(hash == hash.toUpperCase())],
+                    contains_lower_case_only: [Number(hash == hash.toLowerCase())],
+                    contains_mixed_upper_lower_case: [Number(/[A-Z]/.test(hash) & /[a-z]/.test(hash))],
+                    contains_equal: [Number(/\=/.test(hash))],
+                    contains_slash: [Number(/\//.test(hash))],
+                    contains_dot: [Number(/\./.test(hash))],
+                    contains_colon: [Number(/\:/.test(hash))],
+                    contains_special_chars: [Number(/\W/.test(hash))],
                 };
                 return features;
             }
@@ -297,10 +262,10 @@
                 font-weight: bold;
             }
             #results .result .hash-type {
-                font-size: 1.8em;
+                font-size: 1.4em;
             }
             #results .result .probability {
-                font-size: 1.2em;
+                font-size: 1.4em;
                 color: var(--color-gray-dark);
             }
 

@@ -22,34 +22,50 @@ PREDICTIONS=$DIR_MODEL/predictions.csv
 echo -e "\n\nCreate the dataspec"
 $DIR_MODEL/infer_dataspec --dataset=csv:$DATASET_TRAIN --guide=$DATASPEC_GUIDE --output=$DATASPEC
 
+sleep 2
+
 # Display the dataspec
 echo -e "\n\nDisplay the dataspec"
 $DIR_MODEL/show_dataspec --dataspec=$DATASPEC
+
+sleep 2
 
 # Train the model
 echo -e "\n\nTrain the model"
 $DIR_MODEL/train --dataset=csv:$DATASET_TRAIN --dataspec=$DATASPEC --config=$TRAIN_CONFIG --output=$MODEL
 
+sleep 2
+
 # Show the model information
 echo -e "\n\nShow the model information"
 $DIR_MODEL/show_model --model=$MODEL
+
+sleep 2
 
 # Evaluate the model
 echo -e "\n\nEvaluate the model"
 $DIR_MODEL/evaluate --dataset=csv:$DATASET_TEST --model=$MODEL
 # ./evaluate --dataset=csv:$DATASET_TEST --model=$MODEL --format=html > $EVALUATIONS
 
+sleep 2
+
 # Generate predictions
 echo -e "\n\nGenerate predictions"
 $DIR_MODEL/predict --dataset=csv:$DATASET_TEST --model=$MODEL --output=csv:$PREDICTIONS
+
+sleep 2
 
 # Show the predictions for the first 3 examples
 echo -e "\n\nResults:"
 head -n 4 $PREDICTIONS
 
+sleep 2
+
 # Remove the metadata from the model (makes the model smaller)
 echo -e "\n\nRemove the metadata from the model"
 $DIR_MODEL/edit_model --input=$MODEL --output=$MODEL_PURE --pure_serving=true
+
+sleep 2
 
 # Zip the model
 echo -e "\n\nZip the model"
