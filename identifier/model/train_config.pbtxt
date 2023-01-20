@@ -3,6 +3,12 @@ label: "type"
 
 # learner: "HYPERPARAMETER_OPTIMIZER"
 
+# learner: "RANDOM_FOREST"
+# [yggdrasil_decision_forests.model.random_forest.proto.random_forest_config] {
+#     num_trees: 2000
+# }
+
+
 learner: "GRADIENT_BOOSTED_TREES"
 [yggdrasil_decision_forests.model.gradient_boosted_trees.proto.gradient_boosted_trees_config] {
     num_trees: 2000

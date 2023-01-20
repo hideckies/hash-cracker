@@ -1,10 +1,10 @@
 columns {
   type: CATEGORICAL
   name: "type"
-  is_manual_type: false
+  is_manual_type: true
   categorical {
     most_frequent_value: 1
-    number_of_unique_values: 22
+    number_of_unique_values: 35
     items {
       key: "<OOD>"
       value {
@@ -13,150 +13,241 @@ columns {
       }
     }
     items {
+      key: "Apache MD5 Crypt"
+      value {
+        index: 10
+        count: 334
+      }
+    }
+    items {
       key: "Atbash"
       value {
-        index: 20
-        count: 400
+        index: 9
+        count: 334
+      }
+    }
+    items {
+      key: "BLAKE2b"
+      value {
+        index: 8
+        count: 334
+      }
+    }
+    items {
+      key: "BLAKE2s"
+      value {
+        index: 7
+        count: 334
       }
     }
     items {
       key: "Base32"
       value {
-        index: 19
-        count: 400
+        index: 6
+        count: 334
       }
     }
     items {
       key: "Base64"
       value {
-        index: 18
-        count: 400
+        index: 5
+        count: 334
       }
     }
     items {
       key: "Binary"
       value {
-        index: 17
-        count: 400
+        index: 4
+        count: 334
       }
     }
     items {
       key: "Caesar"
       value {
-        index: 16
-        count: 400
-      }
-    }
-    items {
-      key: "Decimal"
-      value {
-        index: 15
-        count: 400
+        index: 3
+        count: 334
       }
     }
     items {
       key: "Hex"
       value {
-        index: 14
-        count: 400
+        index: 33
+        count: 333
+      }
+    }
+    items {
+      key: "LM"
+      value {
+        index: 32
+        count: 333
       }
     }
     items {
       key: "MD4"
       value {
-        index: 13
-        count: 400
+        index: 31
+        count: 333
       }
     }
     items {
       key: "MD5"
       value {
-        index: 12
-        count: 400
+        index: 30
+        count: 333
       }
     }
     items {
       key: "NTLM"
       value {
-        index: 11
-        count: 400
+        index: 29
+        count: 333
       }
     }
     items {
       key: "PBKDF2-HMAC-SHA256"
       value {
-        index: 10
-        count: 400
+        index: 28
+        count: 333
+      }
+    }
+    items {
+      key: "PBKDF2-HMAC-SHA512"
+      value {
+        index: 27
+        count: 333
+      }
+    }
+    items {
+      key: "PHPass"
+      value {
+        index: 26
+        count: 333
+      }
+    }
+    items {
+      key: "ROT13"
+      value {
+        index: 25
+        count: 333
+      }
+    }
+    items {
+      key: "ROT47"
+      value {
+        index: 24
+        count: 333
       }
     }
     items {
       key: "SHA1"
       value {
-        index: 9
-        count: 400
+        index: 23
+        count: 333
       }
     }
     items {
       key: "SHA224"
       value {
-        index: 8
-        count: 400
+        index: 22
+        count: 333
       }
     }
     items {
       key: "SHA256"
       value {
-        index: 7
-        count: 400
+        index: 21
+        count: 333
       }
     }
     items {
       key: "SHA3-224"
       value {
-        index: 6
-        count: 400
+        index: 20
+        count: 333
       }
     }
     items {
       key: "SHA3-256"
       value {
-        index: 5
-        count: 400
+        index: 19
+        count: 333
       }
     }
     items {
       key: "SHA3-384"
       value {
-        index: 4
-        count: 400
+        index: 18
+        count: 333
       }
     }
     items {
       key: "SHA3-512"
       value {
-        index: 3
-        count: 400
+        index: 17
+        count: 333
       }
     }
     items {
       key: "SHA384"
       value {
-        index: 2
-        count: 400
+        index: 16
+        count: 333
       }
     }
     items {
       key: "SHA512"
       value {
-        index: 1
-        count: 400
+        index: 15
+        count: 333
       }
     }
     items {
       key: "Vigenere"
       value {
-        index: 21
-        count: 349
+        index: 34
+        count: 289
+      }
+    }
+    items {
+      key: "bcrypt"
+      value {
+        index: 2
+        count: 334
+      }
+    }
+    items {
+      key: "descrypt"
+      value {
+        index: 1
+        count: 334
+      }
+    }
+    items {
+      key: "md5crypt"
+      value {
+        index: 14
+        count: 333
+      }
+    }
+    items {
+      key: "sha1crypt"
+      value {
+        index: 13
+        count: 333
+      }
+    }
+    items {
+      key: "sha256crypt"
+      value {
+        index: 12
+        count: 333
+      }
+    }
+    items {
+      key: "sha512crypt"
+      value {
+        index: 11
+        count: 333
       }
     }
   }
@@ -172,7 +263,79 @@ columns {
       key: "<OOD>"
       value {
         index: 0
-        count: 8349
+        count: 11287
+      }
+    }
+  }
+}
+columns {
+  type: CATEGORICAL
+  name: "scheme"
+  is_manual_type: false
+  categorical {
+    most_frequent_value: 1
+    number_of_unique_values: 9
+    items {
+      key: "$1$"
+      value {
+        index: 8
+        count: 333
+      }
+    }
+    items {
+      key: "$2b$"
+      value {
+        index: 3
+        count: 334
+      }
+    }
+    items {
+      key: "$5$"
+      value {
+        index: 7
+        count: 333
+      }
+    }
+    items {
+      key: "$6$"
+      value {
+        index: 6
+        count: 333
+      }
+    }
+    items {
+      key: "$P$"
+      value {
+        index: 5
+        count: 333
+      }
+    }
+    items {
+      key: "$apr1$"
+      value {
+        index: 2
+        count: 334
+      }
+    }
+    items {
+      key: "$sha1$"
+      value {
+        index: 4
+        count: 333
+      }
+    }
+    items {
+      key: "<OOD>"
+      value {
+        index: 0
+        count: 0
+      }
+    }
+    items {
+      key: "None"
+      value {
+        index: 1
+        count: 8955
       }
     }
   }
@@ -182,10 +345,10 @@ columns {
   name: "num_of_chars"
   is_manual_type: false
   numerical {
-    mean: 48.527488321954728
-    min_value: 4
+    mean: 52.671155209071578
+    min_value: 5
     max_value: 128
-    standard_deviation: 37.034757124750655
+    standard_deviation: 39.051932713120053
   }
 }
 columns {
@@ -193,10 +356,10 @@ columns {
   name: "contains_bit_only"
   is_manual_type: true
   numerical {
-    mean: 0.047909929332854234
+    mean: 0.030031892274982281
     min_value: 0
     max_value: 1
-    standard_deviation: 0.21357567278174533
+    standard_deviation: 0.17067506473227465
   }
 }
 columns {
@@ -204,10 +367,10 @@ columns {
   name: "contains_decimal_only"
   is_manual_type: true
   numerical {
-    mean: 0.10516229488561504
+    mean: 0.038625088589652731
     min_value: 0
     max_value: 1
-    standard_deviation: 0.30676242700175321
+    standard_deviation: 0.19269974343806015
   }
 }
 columns {
@@ -215,10 +378,10 @@ columns {
   name: "contains_hex_only"
   is_manual_type: true
   numerical {
-    mean: 0.76667864414899989
+    mean: 0.56520198440822111
     min_value: 0
     max_value: 1
-    standard_deviation: 0.42294503278186296
+    standard_deviation: 0.4957304723629869
   }
 }
 columns {
@@ -226,10 +389,10 @@ columns {
   name: "contains_alpha_only"
   is_manual_type: true
   numerical {
-    mean: 0.14061564259192719
+    mean: 0.11507795889440113
     min_value: 0
     max_value: 1
-    standard_deviation: 0.34762463038511321
+    standard_deviation: 0.31911600127712125
   }
 }
 columns {
@@ -237,10 +400,10 @@ columns {
   name: "contains_upper_case_only"
   is_manual_type: true
   numerical {
-    mean: 0.048149478979518504
+    mean: 0.05341956059532247
     min_value: 0
     max_value: 1
-    standard_deviation: 0.21408200917760326
+    standard_deviation: 0.22486865308691903
   }
 }
 columns {
@@ -248,10 +411,10 @@ columns {
   name: "contains_lower_case_only"
   is_manual_type: true
   numerical {
-    mean: 0.79782009821535516
+    mean: 0.63837703756201281
     min_value: 0
     max_value: 1
-    standard_deviation: 0.40162568281796451
+    standard_deviation: 0.4804703898010379
   }
 }
 columns {
@@ -259,10 +422,10 @@ columns {
   name: "contains_mixed_upper_lower_case"
   is_manual_type: true
   numerical {
-    mean: 0.047071505569529284
+    mean: 0.26532600992204108
     min_value: 0
     max_value: 1
-    standard_deviation: 0.21179182924028742
+    standard_deviation: 0.44150664590795236
   }
 }
 columns {
@@ -270,10 +433,43 @@ columns {
   name: "contains_equal"
   is_manual_type: true
   numerical {
-    mean: 0.067073901065995922
+    mean: 0.10843373493975904
     min_value: 0
     max_value: 1
-    standard_deviation: 0.25014994075910735
+    standard_deviation: 0.31092741929069734
+  }
+}
+columns {
+  type: NUMERICAL
+  name: "contains_slash"
+  is_manual_type: true
+  numerical {
+    mean: 0.12606307583274273
+    min_value: 0
+    max_value: 1
+    standard_deviation: 0.331920437370661
+  }
+}
+columns {
+  type: NUMERICAL
+  name: "contains_dot"
+  is_manual_type: true
+  numerical {
+    mean: 0.12907512402551383
+    min_value: 0
+    max_value: 1
+    standard_deviation: 0.33528306903765964
+  }
+}
+columns {
+  type: NUMERICAL
+  name: "contains_colon"
+  is_manual_type: true
+  numerical {
+    mean: 0.011782423812898653
+    min_value: 0
+    max_value: 1
+    standard_deviation: 0.10790550635621841
   }
 }
 columns {
@@ -281,10 +477,10 @@ columns {
   name: "contains_special_chars"
   is_manual_type: true
   numerical {
-    mean: 0.071864893999281351
+    mean: 0.28809355067328135
     min_value: 0
     max_value: 1
-    standard_deviation: 0.25826407223954595
+    standard_deviation: 0.45287487977778457
   }
 }
-created_num_rows: 8349
+created_num_rows: 11288

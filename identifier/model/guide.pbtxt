@@ -2,3 +2,8 @@ column_guides {
     column_name_pattern: "^contains.*",
     type: NUMERICAL
 }
+
+column_guides {
+    column_name_pattern: "type",
+    type: CATEGORICAL
+}
