@@ -4,7 +4,8 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Hash Cracker</title>
-        <meta name="description" content="AI-powered Hash Identifier & Cracker online. Guessable hases are descrypt,bcrypt,Caesar,Binary,Base64,Base32,BLAKE2s,BLAKE2b,Atbash,Apache MD5 Crypt,sha512crypt,sha256crypt,sha1crypt,md5crypt,SHA512,SHA384,SHA3-512,SHA3-384,SHA3-256,SHA3-224,SHA256,SHA224,SHA1,ROT47,ROT13,PHPass,PBKDF2-HMAC-SHA512,PBKDF2-HMAC-SHA256,NTLM,MD5,MD4,LM,Hex,Vigenere.">
+        <meta name="description" content="Hash Identifier & Cracker online. It uses AI/Machine learning.">
+        <link rel="icon" href="favicon.ico">
         <script src="ydf/inference.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js"></script>
         <script>
@@ -12,7 +13,7 @@
             let model = null;
 
             // Update from time to time when building the model.
-            const classes = ["descrypt", "bcrypt", "Caesar", "Binary", "Base64", "Base32", "BLAKE2s", "BLAKE2b", "Atbash", "Apache", "MD5", "Crypt", "sha512crypt", "sha256crypt", "sha1crypt", "md5crypt", "SHA512", "SHA384", "SHA3-512", "SHA3-384", "SHA3-256", "SHA3-224", "SHA256", "SHA224", "SHA1", "ROT47", "ROT13", "PHPass", "PBKDF2-HMAC-SHA512", "PBKDF2-HMAC-SHA256", "NTLM", "MD5", "MD4", "LM", "Hex", "Vigenere"];
+            const classes = ['descrypt', 'bcrypt', 'Hex', 'HMAC-SHA1', 'Decimal', 'Caesar', 'CRC-64', 'CRC-32', 'CRC-16', 'Binary', 'Base64', 'Base32', 'BLAKE2s', 'BLAKE2b', 'Atlassian PBKDF2 SHA1', 'Atbash', 'Argon2', 'Apache MD5 Crypt', 'sha512crypt', 'sha256crypt', 'sha1crypt', 'scrypt', 'md5crypt', 'SHA512', 'SHA384', 'SHA3-512', 'SHA3-384', 'SHA3-256', 'SHA3-224', 'SHA256', 'SHA224', 'SHA1', 'ROT47', 'ROT13', 'PHPass', 'PBKDF2-HMAC-SHA512', 'PBKDF2-HMAC-SHA256', 'NTLM', 'MD5', 'MD4', 'LM', 'LDAP salted SHA512', 'LDAP salted SHA256', 'LDAP salted SHA1', 'LDAP salted MD5', 'LDAP SHA1', 'LDAP MD5', 'Keccak-512', 'Keccak-384', 'Keccak-256', 'Keccak-224', 'HMAC-SHA512', 'HMAC-SHA256', 'Vigenere'];
             
             YggdrasilDecisionForests().then(function (m) {
                 ydf = m;
@@ -52,8 +53,8 @@
 
                     // Create feature values
                     let features = createFeatures(hash);
-                    console.log("Features:");
-                    console.log(features);
+                    // console.log("Features:");
+                    // console.log(features);
 
                     // Prediction
                     let predictions = model.predict(features);
@@ -81,7 +82,7 @@
 
                     // Display the result
                     arr.forEach((o, i) => {
-                        if (i >= 5 || o.val <= 0.0001) { return; }
+                        if (o.val <= 0.0001) { return; }
                         let elemResult = document.createElement("div");
                         elemResult.classList.add("result");
                         let elemSpanKey = document.createElement("span");
@@ -99,7 +100,7 @@
 
             function createFeatures(hash) {
                 let scheme = "None";
-                let schmMatch = hash.match(/^\$[0-9a-zA-Z]+\$/);
+                let schmMatch = hash.match(/^(\$[0-9a-zA-Z]+\$|\{[0-9a-zA-Z]+\})/);
                 if (schmMatch) {
                     scheme = schmMatch[0];
                 }
@@ -237,38 +238,36 @@
             }
 
             #results {
-                margin-top: 32px;
+                margin: 28px auto;
                 width: 100%;
             }
             #results .result {
-                margin: 24px 0;
-                width: 100%;
                 background-color: var(--color-white);
                 border-bottom: 2px solid var(--color-black);
-                border-radius: 12px 12px 0 0;
                 padding: 8px;
                 display: flex;
                 flex-direction: row;
-                align-items: baseline;
+                align-items: center;
                 justify-content: space-between;
                 cursor: pointer;
                 transition: 0.1s;
+                font-weight: bold;
+            }
+            #results .result:nth-last-child(-n+1) {
+                border-bottom: none;
             }
             #results .result:hover {
-                background-color: var(--color-gray-light);
+                background-color: var(--color-black);
+                color: var(--color-white);
             }
             #results .result span {
                 margin: 0 8px;
-                font-weight: bold;
-            }
-            #results .result .hash-type {
                 font-size: 1.4em;
             }
             #results .result .probability {
-                font-size: 1.4em;
-                color: var(--color-gray-dark);
+                font-size: 1em;
             }
-
+           
             @media screen and (max-width: 720px) {
                 main {
                     width: 70%;
@@ -303,10 +302,10 @@
             </header>
             <p id="desc">
                 <span>
-                    AI-powered Hash Identifier & Cracker online. Currently Hash Identifier is only available, Cracker is not yet. So I give some useful commands we can crack right away. 
+                    AI-powered Hash Identifier & Cracker online. Currently Hash Identifier is only available, Cracker is not yet. 
                 </span>
                 <span>
-                    Hash Identifier uses Decision Forests model trained with <a href="https://github.com/google/yggdrasil-decision-forests">Yggdrasil</a>.
+                    Hash Identifier uses AI/Machine learning (Decision Forests) model trained with <a href="https://github.com/google/yggdrasil-decision-forests">Yggdrasil</a>.
                 </span>
             </p>
             <div id="wrapper">
