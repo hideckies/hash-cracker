@@ -2,12 +2,16 @@ import base64
 import bcrypt
 import codecs
 import concurrent.futures
+from Crypto.Hash import HMAC, keccak, SHA1, SHA256, SHA512
 import csv
+import fastcrc
 import hashlib
 import os
 from passlib.hash import (
-    apr_md5_crypt, bcrypt, des_crypt, lmhash,
-    md5_crypt, phpass, sha1_crypt, sha256_crypt, sha512_crypt)
+    apr_md5_crypt, argon2, atlassian_pbkdf2_sha1, bcrypt, des_crypt,
+    ldap_md5, ldap_salted_md5, ldap_salted_sha1, ldap_salted_sha256, ldap_salted_sha512, ldap_sha1,
+    lmhash,
+    md5_crypt, phpass, scrypt, sha1_crypt, sha256_crypt, sha512_crypt)
 import re
 import time
 
@@ -60,11 +64,8 @@ def create_row(hash, hash_type):
     ]
 
 
-def get_scheme(chars):
-    if chars[0] != "$":
-        return "None"
-    
-    scheme = re.search("^\$[0-9a-zA-Z]+\$", chars)
+def get_scheme(chars):  
+    scheme = re.search("^(\$[0-9a-zA-Z]+\$|\{[0-9a-zA-Z]+\})", chars)
     if scheme is None:
         return "None"
     else:
@@ -129,9 +130,21 @@ def data_apr_md5_crypt(w):
     return create_row(hash, 'Apache MD5 Crypt')
 
 
+def data_argon2(w):
+    hash = argon2.using(rounds=4).hash(w.encode('utf-8'))
+    hash = re.sub('\'', '', hash)
+    return create_row(hash, 'Argon2')
+
+
 def data_atbash(w):
     hash = ''.join([chr(ord('z') + ord('a') - ord(x)) for x in w])
     return create_row(hash, 'Atbash')
+
+
+def data_atlassian_pbkdf2_sha1(w):
+    hash = atlassian_pbkdf2_sha1.hash(w.encode('utf-8'))
+    hash = re.sub('\'', '', hash)
+    return create_row(hash, 'Atlassian PBKDF2 SHA1')
 
 
 def data_base32(w):
@@ -178,6 +191,21 @@ def data_caesar(w):
     return create_row(hash, 'Caesar')
 
 
+def data_crc16(w):
+    hash = str(fastcrc.crc16.xmodem(w.encode('utf-8')))
+    return create_row(hash, 'CRC-16')
+
+
+def data_crc32(w):
+    hash = str(fastcrc.crc32.aixm(w.encode('utf-8')))
+    return create_row(hash, 'CRC-32')
+
+
+def data_crc64(w):
+    hash = str(fastcrc.crc64.ecma_182(w.encode('utf-8')))
+    return create_row(hash, 'CRC-64')
+
+
 def data_decimal(w):
     hash = ''.join(format(ord(x), 'd') for x in w)
     return create_row(hash, 'Decimal')
@@ -192,6 +220,93 @@ def data_hex(w):
     hash = ''.join(format(ord(x), 'x') for x in w)
     return create_row(hash, 'Hex')
 
+
+def data_hmac_sha1(w):
+    secret = b'secret'
+    hash = HMAC.new(secret, digestmod=SHA1)
+    hash.update(w.encode('utf-8'))
+    hash = hash.hexdigest()
+    return create_row(hash, 'HMAC-SHA1')
+
+
+def data_hmac_sha256(w):
+    secret = b'secret'
+    hash = HMAC.new(secret, digestmod=SHA256)
+    hash.update(w.encode('utf-8'))
+    hash = hash.hexdigest()
+    return create_row(hash, 'HMAC-SHA256')
+
+
+def data_hmac_sha512(w):
+    secret = b'secret'
+    hash = HMAC.new(secret, digestmod=SHA512)
+    hash.update(w.encode('utf-8'))
+    hash = hash.hexdigest()
+    return create_row(hash, 'HMAC-SHA512')
+
+
+def data_keccak_224(w):
+    hash = keccak.new(digest_bits=224)
+    hash.update(w.encode('utf-8'))
+    hash = hash.hexdigest()
+    return create_row(hash, 'Keccak-224')
+
+
+def data_keccak_256(w):
+    hash = keccak.new(digest_bits=256)
+    hash.update(w.encode('utf-8'))
+    hash = hash.hexdigest()
+    return create_row(hash, 'Keccak-256')
+
+
+def data_keccak_384(w):
+    hash = keccak.new(digest_bits=384)
+    hash.update(w.encode('utf-8'))
+    hash = hash.hexdigest()
+    return create_row(hash, 'Keccak-384')
+
+
+def data_keccak_512(w):
+    hash = keccak.new(digest_bits=512)
+    hash.update(w.encode('utf-8'))
+    hash = hash.hexdigest()
+    return create_row(hash, 'Keccak-512')
+
+
+def data_ldap_md5(w):
+    hash = ldap_md5.hash(w.encode('utf-8'))
+    hash = re.sub('\'', '', hash)
+    return create_row(hash, 'LDAP MD5')
+
+
+def data_ldap_salted_md5(w):
+    hash = ldap_salted_md5.hash(w.encode('utf-8'))
+    hash = re.sub('\'', '', hash)
+    return create_row(hash, 'LDAP salted MD5')
+
+
+def data_ldap_salted_sha1(w):
+    hash = ldap_salted_sha1.hash(w.encode('utf-8'))
+    hash = re.sub('\'', '', hash)
+    return create_row(hash, 'LDAP salted SHA1')
+
+def data_ldap_salted_sha256(w):
+    hash = ldap_salted_sha256.hash(w.encode('utf-8'))
+    hash = re.sub('\'', '', hash)
+    return create_row(hash, 'LDAP salted SHA256')
+
+
+def data_ldap_salted_sha512(w):
+    hash = ldap_salted_sha512.hash(w.encode('utf-8'))
+    hash = re.sub('\'', '', hash)
+    return create_row(hash, 'LDAP salted SHA512')
+
+
+def data_ldap_sha1(w):
+    hash = ldap_sha1.hash(w.encode('utf-8'))
+    hash = re.sub('\'', '', hash)
+    return create_row(hash, 'LDAP SHA1')
+    
 
 def data_lm(w):
     hash = lmhash.hash(w.encode('utf-8'))
@@ -248,6 +363,11 @@ def data_rot47(w):
             chars.append(w[ch])
     hash = ''.join(chars)
     return create_row(hash, 'ROT47')
+
+
+def data_scrypt(w):
+    hash = scrypt.hash(w.encode('utf-8'))
+    return create_row(hash, 'scrypt')
 
 
 def data_sha1(w):
@@ -334,7 +454,9 @@ def data_vigenere(w):
 def create_datas(w):
     datas = []
     datas.append(data_apr_md5_crypt(w))
+    datas.append(data_argon2(w))
     datas.append(data_atbash(w))
+    datas.append(data_atlassian_pbkdf2_sha1(w))
     datas.append(data_base32(w))
     datas.append(data_base64(w))
     datas.append(data_bcrypt(w))
@@ -342,9 +464,25 @@ def create_datas(w):
     datas.append(data_blake2b(w))
     datas.append(data_blake2s(w))
     datas.append(data_caesar(w))
+    datas.append(data_crc16(w))
+    datas.append(data_crc32(w))
+    datas.append(data_crc64(w))
     datas.append(data_decimal(w))
     datas.append(data_descrypt(w))
     datas.append(data_hex(w))
+    datas.append(data_hmac_sha1(w))
+    datas.append(data_hmac_sha256(w))
+    datas.append(data_hmac_sha512(w))
+    datas.append(data_keccak_224(w))
+    datas.append(data_keccak_256(w))
+    datas.append(data_keccak_384(w))
+    datas.append(data_keccak_512(w))
+    datas.append(data_ldap_md5(w))
+    datas.append(data_ldap_salted_md5(w))
+    datas.append(data_ldap_salted_sha1(w))
+    datas.append(data_ldap_salted_sha256(w))
+    datas.append(data_ldap_salted_sha512(w))
+    datas.append(data_ldap_sha1(w))
     datas.append(data_lm(w))
     datas.append(data_md4(w))
     datas.append(data_md5(w))
@@ -355,6 +493,7 @@ def create_datas(w):
     datas.append(data_phpass(w))
     datas.append(data_rot13(w))
     datas.append(data_rot47(w))
+    datas.append(data_scrypt(w))
     datas.append(data_sha1(w))
     datas.append(data_sha1_crypt(w))
     datas.append(data_sha224(w))
@@ -399,7 +538,7 @@ def main():
         for idx, word in enumerate(words):
             if idx < num_per_hash:
                 futures.append(executor.submit(proc, word))
-        print(f"Excurint total {len(futures)} jobs")
+        print(f"Executing total {len(futures)} jobs")
         for idx, future in enumerate(concurrent.futures.as_completed(futures)):
             datas += future.result()
     

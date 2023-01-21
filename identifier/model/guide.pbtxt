@@ -7,3 +7,8 @@ column_guides {
     column_name_pattern: "type",
     type: CATEGORICAL
 }
+
+column_guides {
+    column_name_pattern: "encoded_text",
+    type: CATEGORICAL
+}
