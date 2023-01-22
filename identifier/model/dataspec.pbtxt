@@ -15,308 +15,308 @@ columns {
     items {
       key: "Apache MD5 Crypt"
       value {
-        index: 50
+        index: 52
         count: 375
       }
     }
     items {
       key: "Argon2"
       value {
-        index: 49
+        index: 51
         count: 375
       }
     }
     items {
       key: "Atbash"
       value {
-        index: 48
+        index: 50
         count: 375
       }
     }
     items {
       key: "Atlassian PBKDF2 SHA1"
       value {
-        index: 47
+        index: 49
         count: 375
       }
     }
     items {
       key: "BLAKE2b"
       value {
-        index: 46
+        index: 48
         count: 375
       }
     }
     items {
       key: "BLAKE2s"
       value {
-        index: 45
+        index: 47
         count: 375
       }
     }
     items {
       key: "Base32"
       value {
-        index: 44
+        index: 46
         count: 375
       }
     }
     items {
       key: "Base64"
       value {
-        index: 43
+        index: 45
         count: 375
       }
     }
     items {
       key: "Binary"
       value {
-        index: 42
+        index: 44
         count: 375
       }
     }
     items {
       key: "CRC-16"
       value {
-        index: 41
+        index: 43
         count: 375
       }
     }
     items {
       key: "CRC-32"
       value {
-        index: 40
+        index: 42
         count: 375
       }
     }
     items {
       key: "CRC-64"
       value {
-        index: 39
+        index: 41
         count: 375
       }
     }
     items {
       key: "Caesar"
       value {
-        index: 38
+        index: 40
         count: 375
       }
     }
     items {
       key: "Decimal"
       value {
-        index: 37
+        index: 39
         count: 375
       }
     }
     items {
       key: "HMAC-SHA1"
       value {
-        index: 36
+        index: 38
         count: 375
       }
     }
     items {
       key: "HMAC-SHA256"
       value {
-        index: 35
+        index: 37
         count: 375
       }
     }
     items {
       key: "HMAC-SHA512"
       value {
-        index: 34
+        index: 36
         count: 375
       }
     }
     items {
       key: "Hex"
       value {
-        index: 33
+        index: 35
         count: 375
       }
     }
     items {
       key: "Keccak-224"
       value {
-        index: 32
+        index: 34
         count: 375
       }
     }
     items {
       key: "Keccak-256"
       value {
-        index: 31
+        index: 33
         count: 375
       }
     }
     items {
       key: "Keccak-384"
       value {
-        index: 30
+        index: 32
         count: 375
       }
     }
     items {
       key: "Keccak-512"
       value {
-        index: 29
+        index: 31
         count: 375
       }
     }
     items {
       key: "LDAP MD5"
       value {
-        index: 28
+        index: 30
         count: 375
       }
     }
     items {
       key: "LDAP SHA1"
       value {
-        index: 27
+        index: 29
         count: 375
       }
     }
     items {
       key: "LDAP salted MD5"
       value {
-        index: 26
+        index: 28
         count: 375
       }
     }
     items {
       key: "LDAP salted SHA1"
       value {
-        index: 25
+        index: 27
         count: 375
       }
     }
     items {
       key: "LDAP salted SHA256"
       value {
-        index: 24
+        index: 26
         count: 375
       }
     }
     items {
       key: "LDAP salted SHA512"
       value {
-        index: 23
+        index: 25
         count: 375
       }
     }
     items {
       key: "LM"
       value {
-        index: 22
+        index: 24
         count: 375
       }
     }
     items {
       key: "MD4"
       value {
-        index: 21
+        index: 23
         count: 375
       }
     }
     items {
       key: "MD5"
       value {
-        index: 20
+        index: 22
         count: 375
       }
     }
     items {
       key: "NTLM"
       value {
-        index: 19
+        index: 21
         count: 375
       }
     }
     items {
       key: "PBKDF2-HMAC-SHA256"
       value {
-        index: 18
+        index: 20
         count: 375
       }
     }
     items {
       key: "PBKDF2-HMAC-SHA512"
       value {
-        index: 17
+        index: 19
         count: 375
       }
     }
     items {
       key: "PHPass"
       value {
-        index: 16
+        index: 18
         count: 375
       }
     }
     items {
       key: "ROT13"
       value {
-        index: 15
+        index: 17
         count: 375
       }
     }
     items {
       key: "ROT47"
       value {
-        index: 14
+        index: 16
         count: 375
       }
     }
     items {
       key: "SHA1"
       value {
-        index: 13
+        index: 15
         count: 375
       }
     }
     items {
       key: "SHA224"
       value {
-        index: 12
+        index: 14
         count: 375
       }
     }
     items {
       key: "SHA256"
       value {
-        index: 11
+        index: 13
         count: 375
       }
     }
     items {
       key: "SHA3-224"
       value {
-        index: 10
+        index: 12
         count: 375
       }
     }
     items {
       key: "SHA3-256"
       value {
-        index: 53
-        count: 374
+        index: 11
+        count: 375
       }
     }
     items {
       key: "SHA3-384"
       value {
-        index: 52
-        count: 374
+        index: 10
+        count: 375
       }
     }
     items {
       key: "SHA3-512"
       value {
-        index: 51
+        index: 53
         count: 374
       }
     }
@@ -338,55 +338,55 @@ columns {
       key: "Vigenere"
       value {
         index: 54
-        count: 327
+        count: 325
       }
     }
     items {
       key: "bcrypt"
+      value {
+        index: 1
+        count: 750
+      }
+    }
+    items {
+      key: "descrypt"
       value {
         index: 7
         count: 375
       }
     }
     items {
-      key: "descrypt"
+      key: "md5crypt"
       value {
         index: 6
         count: 375
       }
     }
     items {
-      key: "md5crypt"
+      key: "scrypt"
       value {
         index: 5
         count: 375
       }
     }
     items {
-      key: "scrypt"
+      key: "sha1crypt"
       value {
         index: 4
         count: 375
       }
     }
     items {
-      key: "sha1crypt"
+      key: "sha256crypt"
       value {
         index: 3
         count: 375
       }
     }
     items {
-      key: "sha256crypt"
-      value {
-        index: 2
-        count: 375
-      }
-    }
-    items {
       key: "sha512crypt"
       value {
-        index: 1
+        index: 2
         count: 375
       }
     }
@@ -403,7 +403,7 @@ columns {
       key: "<OOD>"
       value {
         index: 0
-        count: 20197
+        count: 20572
       }
     }
   }
@@ -414,9 +414,16 @@ columns {
   is_manual_type: false
   categorical {
     most_frequent_value: 1
-    number_of_unique_values: 18
+    number_of_unique_values: 19
     items {
       key: "$1$"
+      value {
+        index: 18
+        count: 375
+      }
+    }
+    items {
+      key: "$2a$"
       value {
         index: 17
         count: 375
@@ -548,10 +555,10 @@ columns {
   name: "num_of_chars"
   is_manual_type: false
   numerical {
-    mean: 55.225308183573446
+    mean: 55.321959755030619
     min_value: 3
     max_value: 128
-    standard_deviation: 38.382192663034324
+    standard_deviation: 38.032301801162085
   }
 }
 columns {
@@ -559,10 +566,10 @@ columns {
   name: "contains_bit_only"
   is_manual_type: true
   numerical {
-    mean: 0.018812812515471063
+    mean: 0.018469913483036844
     min_value: 0
     max_value: 1
-    standard_deviation: 0.13586349988399679
+    standard_deviation: 0.13464314233916994
   }
 }
 columns {
@@ -570,10 +577,10 @@ columns {
   name: "contains_decimal_only"
   is_manual_type: true
   numerical {
-    mean: 0.098173176889945049
+    mean: 0.096529600466608342
     min_value: 0
     max_value: 1
-    standard_deviation: 0.29754865859096158
+    standard_deviation: 0.29531616396730692
   }
 }
 columns {
@@ -581,10 +588,10 @@ columns {
   name: "contains_hex_only"
   is_manual_type: true
   numerical {
-    mean: 0.55943363532848156
+    mean: 0.549479926120346
     min_value: 0
     max_value: 1
-    standard_deviation: 0.49645507650908466
+    standard_deviation: 0.49754571338835296
   }
 }
 columns {
@@ -592,10 +599,10 @@ columns {
   name: "contains_alpha_only"
   is_manual_type: true
   numerical {
-    mean: 0.072825387395415608
+    mean: 0.0712063769806552
     min_value: 0
     max_value: 1
-    standard_deviation: 0.25984966874353188
+    standard_deviation: 0.25716926110626837
   }
 }
 columns {
@@ -603,10 +610,10 @@ columns {
   name: "contains_upper_case_only"
   is_manual_type: true
   numerical {
-    mean: 0.033516510718352391
+    mean: 0.032808398950131233
     min_value: 0
     max_value: 1
-    standard_deviation: 0.17998098296103107
+    standard_deviation: 0.17813480263121031
   }
 }
 columns {
@@ -614,10 +621,10 @@ columns {
   name: "contains_lower_case_only"
   is_manual_type: true
   numerical {
-    mean: 0.53175899797019655
+    mean: 0.52192087100223583
     min_value: 0
     max_value: 1
-    standard_deviation: 0.49899034664803793
+    standard_deviation: 0.49951924428844913
   }
 }
 columns {
@@ -625,10 +632,10 @@ columns {
   name: "contains_mixed_upper_lower_case"
   is_manual_type: true
   numerical {
-    mean: 0.33392742214961135
+    mean: 0.34611645766501409
     min_value: 0
     max_value: 1
-    standard_deviation: 0.47161414194882517
+    standard_deviation: 0.47573086445850515
   }
 }
 columns {
@@ -636,10 +643,10 @@ columns {
   name: "contains_equal"
   is_manual_type: true
   numerical {
-    mean: 0.17976137432546166
+    mean: 0.17658209390492854
     min_value: 0
     max_value: 1
-    standard_deviation: 0.38398857095763006
+    standard_deviation: 0.38131464437794615
   }
 }
 columns {
@@ -647,10 +654,10 @@ columns {
   name: "contains_slash"
   is_manual_type: true
   numerical {
-    mean: 0.16332491707510272
+    mean: 0.170214834256829
     min_value: 0
     max_value: 1
-    standard_deviation: 0.36966185702275739
+    standard_deviation: 0.3758214262861409
   }
 }
 columns {
@@ -658,10 +665,10 @@ columns {
   name: "contains_dot"
   is_manual_type: true
   numerical {
-    mean: 0.079904945789395512
+    mean: 0.094731214153786339
     min_value: 0
     max_value: 1
-    standard_deviation: 0.27114598545394192
+    standard_deviation: 0.29284332196370094
   }
 }
 columns {
@@ -669,10 +676,10 @@ columns {
   name: "contains_colon"
   is_manual_type: true
   numerical {
-    mean: 0.0076241398089014305
+    mean: 0.0073393603577330616
     min_value: 0
     max_value: 1
-    standard_deviation: 0.086982827621753911
+    standard_deviation: 0.085355106158169575
   }
 }
 columns {
@@ -680,10 +687,10 @@ columns {
   name: "contains_special_chars"
   is_manual_type: true
   numerical {
-    mean: 0.34783900193078865
+    mean: 0.36064936327403518
     min_value: 0
     max_value: 1
-    standard_deviation: 0.47628461099072
+    standard_deviation: 0.48018892120088336
   }
 }
-created_num_rows: 20199
+created_num_rows: 20574
