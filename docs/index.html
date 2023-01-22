@@ -20,7 +20,7 @@
             let model = null;
 
             // Update from time to time when building the model.
-            const classes = ['sha512crypt', 'sha256crypt', 'sha1crypt', 'scrypt', 'md5crypt', 'descrypt', 'bcrypt', 'SHA512', 'SHA384', 'SHA3-224', 'SHA256', 'SHA224', 'SHA1', 'ROT47', 'ROT13', 'PHPass', 'PBKDF2-HMAC-SHA512', 'PBKDF2-HMAC-SHA256', 'NTLM', 'MD5', 'MD4', 'LM', 'LDAP salted SHA512', 'LDAP salted SHA256', 'LDAP salted SHA1', 'LDAP salted MD5', 'LDAP SHA1', 'LDAP MD5', 'Keccak-512', 'Keccak-384', 'Keccak-256', 'Keccak-224', 'Hex', 'HMAC-SHA512', 'HMAC-SHA256', 'HMAC-SHA1', 'Decimal', 'Caesar', 'CRC-64', 'CRC-32', 'CRC-16', 'Binary', 'Base64', 'Base32', 'BLAKE2s', 'BLAKE2b', 'Atlassian PBKDF2 SHA1', 'Atbash', 'Argon2', 'Apache MD5 Crypt', 'SHA3-512', 'SHA3-384', 'SHA3-256', 'Vigenere'];
+            const classes = ['bcrypt', 'sha512crypt', 'sha256crypt', 'sha1crypt', 'scrypt', 'md5crypt', 'descrypt', 'SHA512', 'SHA384', 'SHA3-384', 'SHA3-256', 'SHA3-224', 'SHA256', 'SHA224', 'SHA1', 'ROT47', 'ROT13', 'PHPass', 'PBKDF2-HMAC-SHA512', 'PBKDF2-HMAC-SHA256', 'NTLM', 'MD5', 'MD4', 'LM', 'LDAP salted SHA512', 'LDAP salted SHA256', 'LDAP salted SHA1', 'LDAP salted MD5', 'LDAP SHA1', 'LDAP MD5', 'Keccak-512', 'Keccak-384', 'Keccak-256', 'Keccak-224', 'Hex', 'HMAC-SHA512', 'HMAC-SHA256', 'HMAC-SHA1', 'Decimal', 'Caesar', 'CRC-64', 'CRC-32', 'CRC-16', 'Binary', 'Base64', 'Base32', 'BLAKE2s', 'BLAKE2b', 'Atlassian PBKDF2 SHA1', 'Atbash', 'Argon2', 'Apache MD5 Crypt', 'SHA3-512', 'Vigenere'];
             
             YggdrasilDecisionForests().then(function (m) {
                 ydf = m;
@@ -57,6 +57,9 @@
                         console.log("Hash not given.");
                         return;
                     }
+
+                    // Adjust the hash text
+                    hash = hash.replace(/\s/g, "");
 
                     // Create feature values
                     let features = createFeatures(hash);

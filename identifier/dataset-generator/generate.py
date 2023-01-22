@@ -1,5 +1,4 @@
 import base64
-import bcrypt
 import codecs
 import concurrent.futures
 from Crypto.Hash import HMAC, keccak, SHA1, SHA256, SHA512
@@ -157,8 +156,13 @@ def data_base64(w):
     return create_row(hash, 'Base64')
 
 
-def data_bcrypt(w):
-    hash = bcrypt.hash(w.encode('utf-8'))
+def data_bcrypt_2a(w):
+    hash = bcrypt.hash(w.encode('utf-8'), ident="2a")
+    return create_row(hash, 'bcrypt')
+
+
+def data_bcrypt_2b(w):
+    hash = bcrypt.hash(w.encode('utf-8'), ident="2b")
     return create_row(hash, 'bcrypt')
 
 
@@ -459,7 +463,8 @@ def create_datas(w):
     datas.append(data_atlassian_pbkdf2_sha1(w))
     datas.append(data_base32(w))
     datas.append(data_base64(w))
-    datas.append(data_bcrypt(w))
+    datas.append(data_bcrypt_2a(w))
+    datas.append(data_bcrypt_2b(w))
     datas.append(data_binary(w))
     datas.append(data_blake2b(w))
     datas.append(data_blake2s(w))
