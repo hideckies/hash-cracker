@@ -4,8 +4,15 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Hash Cracker</title>
-        <meta name="description" content="Hash Identifier & Cracker online. It uses AI/Machine learning.">
-        <link rel="icon" href="favicon.ico">
+        <meta name="description" content="Hash Identifier & Cracker online. It uses AI/Machine learning Decision Forests model.">
+        <link rel="icon" href="favicon.ico" />
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@hideckies">
+        <meta name="twitter:creator" content="@hideckies">
+        <meta property="og:url" content="https://hash-cracker.hdks.org">
+        <meta property="og:title" content="Hash Cracker">
+        <meta property="og:description" content="Hash Identifier & Cracker online. It uses AI/Machine learning Decision Forests model.">
+        <meta property="og:image" content="https://hash-cracker.hdks.org/img/screenshot.png">
         <script src="ydf/inference.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js"></script>
         <script>
@@ -13,7 +20,7 @@
             let model = null;
 
             // Update from time to time when building the model.
-            const classes = ['descrypt', 'bcrypt', 'Hex', 'HMAC-SHA1', 'Decimal', 'Caesar', 'CRC-64', 'CRC-32', 'CRC-16', 'Binary', 'Base64', 'Base32', 'BLAKE2s', 'BLAKE2b', 'Atlassian PBKDF2 SHA1', 'Atbash', 'Argon2', 'Apache MD5 Crypt', 'sha512crypt', 'sha256crypt', 'sha1crypt', 'scrypt', 'md5crypt', 'SHA512', 'SHA384', 'SHA3-512', 'SHA3-384', 'SHA3-256', 'SHA3-224', 'SHA256', 'SHA224', 'SHA1', 'ROT47', 'ROT13', 'PHPass', 'PBKDF2-HMAC-SHA512', 'PBKDF2-HMAC-SHA256', 'NTLM', 'MD5', 'MD4', 'LM', 'LDAP salted SHA512', 'LDAP salted SHA256', 'LDAP salted SHA1', 'LDAP salted MD5', 'LDAP SHA1', 'LDAP MD5', 'Keccak-512', 'Keccak-384', 'Keccak-256', 'Keccak-224', 'HMAC-SHA512', 'HMAC-SHA256', 'Vigenere'];
+            const classes = ['sha512crypt', 'sha256crypt', 'sha1crypt', 'scrypt', 'md5crypt', 'descrypt', 'bcrypt', 'SHA512', 'SHA384', 'SHA3-224', 'SHA256', 'SHA224', 'SHA1', 'ROT47', 'ROT13', 'PHPass', 'PBKDF2-HMAC-SHA512', 'PBKDF2-HMAC-SHA256', 'NTLM', 'MD5', 'MD4', 'LM', 'LDAP salted SHA512', 'LDAP salted SHA256', 'LDAP salted SHA1', 'LDAP salted MD5', 'LDAP SHA1', 'LDAP MD5', 'Keccak-512', 'Keccak-384', 'Keccak-256', 'Keccak-224', 'Hex', 'HMAC-SHA512', 'HMAC-SHA256', 'HMAC-SHA1', 'Decimal', 'Caesar', 'CRC-64', 'CRC-32', 'CRC-16', 'Binary', 'Base64', 'Base32', 'BLAKE2s', 'BLAKE2b', 'Atlassian PBKDF2 SHA1', 'Atbash', 'Argon2', 'Apache MD5 Crypt', 'SHA3-512', 'SHA3-384', 'SHA3-256', 'Vigenere'];
             
             YggdrasilDecisionForests().then(function (m) {
                 ydf = m;
@@ -82,7 +89,7 @@
 
                     // Display the result
                     arr.forEach((o, i) => {
-                        if (o.val <= 0.0001) { return; }
+                        if (i >= 10 || o.val <= 0.00001) { return; }
                         let elemResult = document.createElement("div");
                         elemResult.classList.add("result");
                         let elemSpanKey = document.createElement("span");
@@ -90,7 +97,11 @@
                         elemSpanKey.innerText = o.key;
                         let elemSpanVal = document.createElement("span");
                         elemSpanVal.classList.add("probability");
-                        elemSpanVal.innerText = new Intl.NumberFormat('en-US', { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(o.val);
+                        elemSpanVal.innerText = new Intl.NumberFormat('en-US', {
+                            style: 'percent',
+                            minimumFractionDigits: 3,
+                            maximumFractionDigits: 3
+                        }).format(o.val);
                         elemResult.appendChild(elemSpanKey);
                         elemResult.appendChild(elemSpanVal);
                         elemResults.appendChild(elemResult);
@@ -244,14 +255,13 @@
             #results .result {
                 background-color: var(--color-white);
                 border-bottom: 2px solid var(--color-black);
-                padding: 8px;
+                padding: 14px 8px;
                 display: flex;
                 flex-direction: row;
                 align-items: center;
                 justify-content: space-between;
                 cursor: pointer;
                 transition: 0.1s;
-                font-weight: bold;
             }
             #results .result:nth-last-child(-n+1) {
                 border-bottom: none;
@@ -261,11 +271,13 @@
                 color: var(--color-white);
             }
             #results .result span {
-                margin: 0 8px;
-                font-size: 1.4em;
+                font-weight: bold;
+            }
+            #results .result .hash-type {
+                font-size: 1.1em;
             }
             #results .result .probability {
-                font-size: 1em;
+                font-size: 0.9em;
             }
            
             @media screen and (max-width: 720px) {
@@ -302,14 +314,14 @@
             </header>
             <p id="desc">
                 <span>
-                    AI-powered Hash Identifier & Cracker online. Currently Hash Identifier is only available, Cracker is not yet. 
+                    Hash Identifier & Cracker online. Currently Hash Identifier is only available, Cracker is not yet. 
                 </span>
                 <span>
                     Hash Identifier uses AI/Machine learning (Decision Forests) model trained with <a href="https://github.com/google/yggdrasil-decision-forests">Yggdrasil</a>.
                 </span>
             </p>
             <div id="wrapper">
-                <textarea type="text" placeholder="Enter MD5, SHA256, Base64, etc." id="hash"></textarea>
+                <textarea type="text" placeholder="Enter hash..." id="hash"></textarea>
                 <button type="button" id="identify">Identify</button>
             </div>
             <div id="results">
