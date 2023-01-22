@@ -35,7 +35,7 @@ header = [
     'contains_slash',
     'contains_dot',
     'contains_colon',
-    'contains_special_chars'
+    'contains_special_chars',
 ]
 num_per_hash = 500
 
@@ -60,7 +60,7 @@ def create_row(hash, hash_type):
         contains_slash(hash),
         contains_dot(hash),
         contains_colon(hash),
-        contains_special_chars(hash)
+        contains_special_chars(hash),
     ]
 
 
@@ -542,10 +542,10 @@ def main():
         for idx, future in enumerate(concurrent.futures.as_completed(futures)):
             datas += future.result()
     
-    # Split datas
-    w = int(len(datas) * 2/3)
-    datas_train = datas[0:w]
-    datas_test = datas[w:]
+    # Data ratio (train:test)
+    ratio = int(len(datas) * 3/4)
+    datas_train = datas[0:ratio]
+    datas_test = datas[ratio:]
 
     write_csv(dataset_path + 'hashes_train.csv', header, datas_train)
     write_csv(dataset_path + 'hashes_test.csv', header, datas_test)
