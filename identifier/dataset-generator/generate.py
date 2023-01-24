@@ -7,10 +7,12 @@ import fastcrc
 import hashlib
 import os
 from passlib.hash import (
-    apr_md5_crypt, argon2, atlassian_pbkdf2_sha1, bcrypt, des_crypt,
+    apr_md5_crypt, argon2, atlassian_pbkdf2_sha1, bcrypt, bsdi_crypt, cisco_asa, cisco_pix, cisco_type7, des_crypt,
+    django_argon2, django_bcrypt, django_bcrypt_sha256, django_des_crypt, django_pbkdf2_sha1, django_pbkdf2_sha256,
+    django_salted_md5, django_salted_sha1, grub_pbkdf2_sha512,
     ldap_md5, ldap_salted_md5, ldap_salted_sha1, ldap_salted_sha256, ldap_salted_sha512, ldap_sha1,
-    lmhash,
-    md5_crypt, phpass, scrypt, sha1_crypt, sha256_crypt, sha512_crypt)
+    lmhash, md5_crypt, mssql2000, mssql2005, mysql323, mysql41, oracle10, oracle11, phpass,
+    postgres_md5, scram, scrypt, sha1_crypt, sha256_crypt, sha512_crypt)
 import re
 import time
 
@@ -158,12 +160,12 @@ def data_base64(w):
 
 def data_bcrypt_2a(w):
     hash = bcrypt.hash(w.encode('utf-8'), ident="2a")
-    return create_row(hash, 'bcrypt')
+    return create_row(hash, 'BCrypt')
 
 
 def data_bcrypt_2b(w):
     hash = bcrypt.hash(w.encode('utf-8'), ident="2b")
-    return create_row(hash, 'bcrypt')
+    return create_row(hash, 'BCrypt')
 
 
 def data_binary(w):
@@ -183,6 +185,11 @@ def data_blake2s(w):
     return create_row(hash.hexdigest(), 'BLAKE2s')
 
 
+def data_bsdi_crypt(w):
+    hash = bsdi_crypt.hash(w.encode('utf-8'))
+    return create_row(hash, 'BSDi Crypt')
+
+
 def data_caesar(w):
     hash = ""
     s = 4 # shift pattern
@@ -193,6 +200,21 @@ def data_caesar(w):
         else:
             hash += chr((ord(char) + s-97) % 26 + 97)
     return create_row(hash, 'Caesar')
+
+
+def data_cisco_asa(w):
+    hash = cisco_asa.hash(w.encode('utf-8'))
+    return create_row(hash, 'CISCO-ASA MD5')
+
+
+def data_cisco_pix(w):
+    hash = cisco_pix.hash(w.encode('utf-8'))
+    return create_row(hash, 'CISCO-PIX MD5')
+
+
+def data_cisco_type7(w):
+    hash = cisco_type7.hash(w.encode('utf-8'))
+    return create_row(hash, 'CISCO Type 7')
 
 
 def data_crc16(w):
@@ -217,7 +239,51 @@ def data_decimal(w):
 
 def data_descrypt(w):
     hash = des_crypt.hash(w.encode('utf-8'))
-    return create_row(hash, 'descrypt')
+    return create_row(hash, 'DES Crypt')
+
+
+def data_django_argon2(w):
+    hash = django_argon2.hash(w.encode('utf-8'))
+    return create_row(hash, 'Django Argon2')
+
+
+def data_django_bcrypt(w):
+    hash = django_bcrypt.hash(w.encode('utf-8'))
+    return create_row(hash, 'Django BCrypt')
+
+
+def data_django_bcrypt_sha256(w):
+    hash = django_bcrypt_sha256.hash(w.encode('utf-8'))
+    return create_row(hash, 'Django BCrypt SHA256')
+
+
+def data_django_des_crypt(w):
+    hash = django_des_crypt.hash(w.encode('utf-8'))
+    return create_row(hash, 'Django DES Crypt')
+
+
+def data_django_pbkdf2_sha1(w):
+    hash = django_pbkdf2_sha1.hash(w.encode('utf-8'))
+    return create_row(hash, 'Django PBKDF2 SHA1')
+
+
+def data_django_pbkdf2_sha256(w):
+    hash = django_pbkdf2_sha256.hash(w.encode('utf-8'))
+    return create_row(hash, 'Django PBKDF2 SHA256')
+
+def data_django_salted_md5(w):
+    hash = django_salted_md5.hash(w.encode('utf-8'))
+    return create_row(hash, 'Django salted MD5')
+
+
+def data_django_salted_sha1(w):
+    hash = django_salted_sha1.hash(w.encode('utf-8'))
+    return create_row(hash, 'Django salted SHA1')
+
+
+def data_grub_pbkdf2_sha512(w):
+    hash = grub_pbkdf2_sha512.hash(w.encode('utf-8'))
+    return create_row(hash, 'Grub PBKDF2 SHA512')
 
 
 def data_hex(w):
@@ -294,6 +360,7 @@ def data_ldap_salted_sha1(w):
     hash = re.sub('\'', '', hash)
     return create_row(hash, 'LDAP salted SHA1')
 
+
 def data_ldap_salted_sha256(w):
     hash = ldap_salted_sha256.hash(w.encode('utf-8'))
     hash = re.sub('\'', '', hash)
@@ -332,9 +399,39 @@ def data_md5_crypt(w):
     return create_row(hash, 'md5crypt')
 
 
+def data_mssql2000(w):
+    hash = mssql2000.hash(w.encode('utf-8'))
+    return create_row(hash, 'MSSQL 2000')
+
+
+def data_mssql2005(w):
+    hash = mssql2005.hash(w.encode('utf-8'))
+    return create_row(hash, 'MSSQL 2005')
+
+
+def data_mysql323(w):
+    hash = mysql323.hash(w.encode('utf-8'))
+    return create_row(hash, 'MySQL 3.2.3')
+
+
+def data_mysql41(w):
+    hash = mysql41.hash(w.encode('utf-8'))
+    return create_row(hash, 'MySQL 4.1')
+
+
 def data_ntlm(w):
     hash = hashlib.new('md4', w.encode('utf-16le')).hexdigest()
     return create_row(hash, 'NTLM')
+
+
+def data_oracle10(w):
+    hash = oracle10.hash(w.encode('utf-8'), user="user")
+    return create_row(hash, 'Oracle 10g')
+
+
+def data_oracle11(w):
+    hash = oracle11.hash(w.encode('utf-8'))
+    return create_row(hash, 'Oracle 11g')
 
 
 def data_pbkdf2_hmac_sha256(w):
@@ -350,6 +447,11 @@ def data_pbkdf2_hmac_sha512(w):
 def data_phpass(w):
     hash = phpass.hash(w.encode('utf-8'))
     return create_row(hash, 'PHPass')
+
+
+def data_postgres_md5(w):
+    hash = postgres_md5.hash(w.encode('utf-8'), user="user")
+    return create_row(hash, 'PostgreSQL MD5')
 
 
 def data_rot13(w):
@@ -369,9 +471,14 @@ def data_rot47(w):
     return create_row(hash, 'ROT47')
 
 
+def data_scram(w):
+    hash = scram.hash(w.encode('utf-8'))
+    return create_row(hash, 'SCRAM')
+
+
 def data_scrypt(w):
     hash = scrypt.hash(w.encode('utf-8'))
-    return create_row(hash, 'scrypt')
+    return create_row(hash, 'SCrypt')
 
 
 def data_sha1(w):
@@ -468,12 +575,25 @@ def create_datas(w):
     datas.append(data_binary(w))
     datas.append(data_blake2b(w))
     datas.append(data_blake2s(w))
+    datas.append(data_bsdi_crypt(w))
     datas.append(data_caesar(w))
+    datas.append(data_cisco_asa(w))
+    datas.append(data_cisco_pix(w))
+    datas.append(data_cisco_type7(w))
     datas.append(data_crc16(w))
     datas.append(data_crc32(w))
     datas.append(data_crc64(w))
     datas.append(data_decimal(w))
     datas.append(data_descrypt(w))
+    datas.append(data_django_argon2(w))
+    datas.append(data_django_bcrypt(w))
+    datas.append(data_django_bcrypt_sha256(w))
+    datas.append(data_django_des_crypt(w))
+    datas.append(data_django_pbkdf2_sha1(w))
+    datas.append(data_django_pbkdf2_sha256(w))
+    datas.append(data_django_salted_md5(w))
+    datas.append(data_django_salted_sha1(w))
+    datas.append(data_grub_pbkdf2_sha512(w))
     datas.append(data_hex(w))
     datas.append(data_hmac_sha1(w))
     datas.append(data_hmac_sha256(w))
@@ -492,12 +612,20 @@ def create_datas(w):
     datas.append(data_md4(w))
     datas.append(data_md5(w))
     datas.append(data_md5_crypt(w))
+    datas.append(data_mssql2000(w))
+    datas.append(data_mssql2005(w))
+    datas.append(data_mysql323(w))
+    datas.append(data_mysql41(w))
     datas.append(data_ntlm(w))
+    datas.append(data_oracle10(w))
+    datas.append(data_oracle11(w))
     datas.append(data_pbkdf2_hmac_sha256(w))
     datas.append(data_pbkdf2_hmac_sha512(w))
     datas.append(data_phpass(w))
+    datas.append(data_postgres_md5(w))
     datas.append(data_rot13(w))
     datas.append(data_rot47(w))
+    datas.append(data_scram(w))
     datas.append(data_scrypt(w))
     datas.append(data_sha1(w))
     datas.append(data_sha1_crypt(w))
