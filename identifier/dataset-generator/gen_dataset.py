@@ -17,8 +17,7 @@ import re
 import time
 
 
-script_path = os.path.dirname(__file__)
-dataset_path = script_path + "/../dataset/"
+dataset_path = os.path.dirname(__file__) + "/../dataset/"
 
 header = [
     'type',
@@ -663,16 +662,16 @@ def main():
 
     datas = []
     
-    with open(script_path + '/words.txt', 'r', encoding='utf-8') as f:
+    with codecs.open('/usr/share/wordlists/rockyou.txt', 'r', encoding='utf-8', errors='ignore') as f:
         words = [w.rstrip() for w in f.readlines()]
 
+    words = words[0:num_per_hash]
+    print(f"words length is {len(words)}")
+
     with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
-        futures = []
-        for idx, word in enumerate(words):
-            if idx < num_per_hash:
-                futures.append(executor.submit(proc, word))
+        futures = [executor.submit(proc, word) for word in words]
         print(f"Executing total {len(futures)} jobs")
-        for idx, future in enumerate(concurrent.futures.as_completed(futures)):
+        for future in concurrent.futures.as_completed(futures):
             datas += future.result()
     
     # Data ratio (train:test)
@@ -691,4 +690,6 @@ def main():
     end = time.time()
     print("Process time: %.2f seconds" % (end - start))
 
-main()
+
+if __name__ == "__main__":
+    main()

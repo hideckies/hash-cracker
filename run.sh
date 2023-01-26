@@ -1,5 +1,10 @@
 #!/bin/bash
 
+echo -e "Running the cracked hashes generator...\n\n"
+./run_gen_cracked_hashes.sh
+
+sleep 2
+
 echo -e "Running the dataset generator...\n\n"
 ./run_gen_dataset.sh
 
