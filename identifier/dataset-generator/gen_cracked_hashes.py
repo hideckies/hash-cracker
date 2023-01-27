@@ -1,7 +1,24 @@
 import codecs
 import concurrent.futures
+from dotenv import load_dotenv
 import gen_dataset as gd
+import os
+import pymongo
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 import sys
+
+load_dotenv()
+mongodb_cluster_url = os.getenv('MONGODB_CLUSTER_URL')
+mongodb_username = os.getenv('MONGODB_USERNAME')
+mongodb_password = os.getenv('MONGODB_PASSWORD')
+
+# MongoDB client 
+client = MongoClient(
+    f"mongodb+srv://{mongodb_username}:{mongodb_password}@{mongodb_cluster_url}/?retryWrites=true&w=majority",
+    server_api=ServerApi('1'))
+db = client.crackedHashes
+
 
 MAX_WORDS_RANGES = 500000
 
@@ -16,6 +33,24 @@ def proc(hash, w):
         return []
 
 
+def writeToDB(col, datas):
+    try:
+        docs = []
+        for data in datas:
+            doc = {
+                "type": data[0],
+                "hash": data[1],
+                "text": data[2],
+            }
+            docs.append(doc)
+
+        result = col.insert_many(docs, ordered=False)
+        print(f"Cracked hashes written to the database successfully.")
+        print(result)
+    except:
+        print("Some hashes could not be written to the database.")
+
+
 def main():
     if (len(sys.argv) != 3):
         print(f"Specify the target hash and the range of the words.\n")
@@ -23,12 +58,13 @@ def main():
         print("python3 gen_cracked_hashes.py md5 0-20000")
         return
 
+    # Arguments
     hash = sys.argv[1]
     rng = sys.argv[2]
     print(f"Target hash is {hash}")
     print(f"The words range is {rng}")
 
-    # Test 
+    # Check if the function exists
     if hasattr(gd, f'data_{hash}'):
         print(f"\"data_{hash}\" function exists. Proceed...")
     else:
@@ -66,8 +102,19 @@ def main():
             datas.append(future.result())
 
     print("hashes generated completely.")
-    # Add to the database.
+
+    # Process MongoDB
     print("Add hashes to the database...")
+
+    col = db.get_collection(hash)
+    # Check indexes
+    indexes = list(col.index_information())
+    if 'hash' not in indexes:
+        # Create an index
+        col.create_index([('hash', pymongo.DESCENDING)], unique=True)
+    # Write to MongoDB
+    writeToDB(col, datas)
+    print("Written new hashes to the database successfully.")
 
 
 if __name__ == "__main__":
