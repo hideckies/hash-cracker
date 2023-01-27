@@ -3,7 +3,12 @@ argon2-cffi-bindings==21.2.0
 bcrypt==4.0.1
 bitarray==2.6.2
 cffi==1.15.1
+dnspython==2.3.0
 fastcrc==0.2.1
 passlib==1.7.4
 pycparser==2.21
 pycryptodome==3.16.0
+pykerberos==1.2.4
+pymongo==4.3.3
+python-dotenv==0.21.1
+python-snappy==0.6.1

@@ -21,6 +21,9 @@
 
             // Update from time to time when building the model.
             const classes = ['BCrypt', 'sha512crypt', 'sha256crypt', 'sha1crypt', 'scrypt', 'md5crypt', 'SHA512', 'SHA384', 'SHA3-384', 'SHA3-256', 'SHA3-224', 'SHA256', 'SHA224', 'SHA1', 'SCRAM', 'ROT47', 'ROT13', 'PostgreSQL MD5', 'PHPass', 'PBKDF2-HMAC-SHA512', 'PBKDF2-HMAC-SHA256', 'Oracle 11g', 'Oracle 10g', 'NTLM', 'MySQL 4.1', 'MySQL 3.2.3', 'MSSQL 2005', 'MSSQL 2000', 'MD5', 'MD4', 'LM', 'LDAP salted SHA512', 'LDAP salted SHA256', 'LDAP salted SHA1', 'LDAP salted MD5', 'LDAP SHA1', 'LDAP MD5', 'Keccak-512', 'Keccak-384', 'Keccak-256', 'Keccak-224', 'Hex', 'HMAC-SHA512', 'HMAC-SHA256', 'HMAC-SHA1', 'Grub PBKDF2 SHA512', 'Django salted SHA1', 'Django salted MD5', 'Django PBKDF2 SHA256', 'Django PBKDF2 SHA1', 'Django DES Crypt', 'Django BCrypt SHA256', 'Django BCrypt', 'Django Argon2', 'Decimal', 'DES Crypt', 'Caesar', 'CRC-64', 'CRC-32', 'CRC-16', 'CISCO-PIX MD5', 'CISCO-ASA MD5', 'CISCO Type 7', 'Binary', 'Base64', 'Base32', 'BSDi Crypt', 'BLAKE2s', 'BLAKE2b', 'Atlassian PBKDF2 SHA1', 'Atbash', 'Argon2', 'Apache MD5 Crypt', 'SHA3-512', 'Vigenere'];
+
+            // Cracked hashes database
+            const MONGO_API = "https://data.mongodb-api.com/app/data-luewa/endpoint/data/v1";
             
             YggdrasilDecisionForests().then(function (m) {
                 ydf = m;
@@ -108,6 +111,15 @@
                         elemResult.appendChild(elemSpanKey);
                         elemResult.appendChild(elemSpanVal);
                         elemResults.appendChild(elemResult);
+                    });
+
+                    // Crack hashes
+                    let resList = elemResults.querySelectorAll(".result");
+                    resList.forEach((item) => {
+                        item.addEventListener('click', () => {
+                            let hashType = item.querySelector(".hash-type").innerText;
+                            // console.log(`Crack ${hash} with ${hashType}`);
+                        });
                     });
                 })
             });

@@ -14,6 +14,16 @@ Genrate DataSet, build the model, and start local web server.
 ./run.sh
 ```
 
+### Generate Cracked Hashes
+
+It generates hashes from rockyou.txt.  
+To write the hashes to MongoDB, you need to your own credentials for MongoDB database.  
+So copy the **.env_template** and rename it to **.env**, then set values.
+
+```sh
+./run_gen_cracked_hashes.sh
+```
+
 ### Generate DataSet Only
 
 ```sh
